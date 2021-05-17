@@ -1,5 +1,5 @@
 const { json } = require('body-parser')
-const statusResponse = require('../common/statusResponse')
+const statusResponse = require('../common/status')
 const conversationModel = require('../model/conversation')
 const userModel = require('../model/user')
 
