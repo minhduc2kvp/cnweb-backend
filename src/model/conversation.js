@@ -5,7 +5,7 @@ const conversationSchema = new mongoose.Schema({
   last_message: {
     is_read: {
       type: Number,
-      default: 2 // 0 da gui chua nhan 1 da gui da nhan chua doc 2 da gui da nhan da doc
+      default: 2 // 0 is send but not receive, 1 is send and received, 2 is read
     },
     kind: String,
     content: String,

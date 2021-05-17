@@ -9,6 +9,8 @@ const uploadRoute = require('./src/router/upload')
 const imageRoute = require('./src/router/image')
 const userRoute = require('./src/router/user')
 
+const socketRoute = require('./src/router/socket')
+
 const app = express();
 const server = http.Server(app);
 
@@ -40,6 +42,8 @@ app.use(express.json());
 app.use('/upload', uploadRoute)
 app.use('/api', imageRoute)
 app.use('/user', userRoute)
+
+io.on('connection', socket => socketRoute(io, socket));
 
 server.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);

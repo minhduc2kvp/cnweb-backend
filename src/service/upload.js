@@ -14,7 +14,7 @@ const uploadImage = async (file) => {
     return new Promise(resolve => {
         image.save()
             .then(result => {
-                resolve(`${URL_IMAGE_API}/${result._id}`)
+                resolve(`${URL_IMAGE_API}/${result._id}`) // resolve url of image
             })
             .catch(err => {
                 console.log(err)
