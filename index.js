@@ -8,8 +8,8 @@ const socket = require('socket.io');
 const uploadRoute = require('./src/router/upload')
 const imageRoute = require('./src/router/image')
 const userRoute = require('./src/router/user')
-
-const socketRoute = require('./src/router/socket')
+const conversationRoute = require('./src/router/conversation')
+const tokenRoute = require('./src/router/token')
 
 const app = express();
 const server = http.Server(app);
@@ -21,11 +21,12 @@ const io = socket(server, {
   }
 });
 
+const host = process.env.HOST;
 const port = process.env.PORT;
 
 const mongoose = require("mongoose");
 mongoose.connect(
-  process.env.MONGO_URL,
+  process.env.MONGO_URL || 'mongodb://localhost:27017/message-db',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -39,12 +40,12 @@ app.use(bodyParser.json({ limit: "50mb" })); // for parsing application/json
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.json());
 
+app.use('/', tokenRoute)
 app.use('/upload', uploadRoute)
-app.use('/api', imageRoute)
+app.use('/image', imageRoute)
 app.use('/user', userRoute)
-
-io.on('connection', socket => socketRoute(io, socket));
+app.use('/conversation', conversationRoute)
 
 server.listen(port, () => {
-  console.log(`Socket.IO server running at http://localhost:${port}/`);
+  console.log(`Server running at ${host}:${port}`);
 });
