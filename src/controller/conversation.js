@@ -1,6 +1,5 @@
-const { json } = require('body-parser')
 const statusResponse = require('../common/status')
-const conversationModel = require('../model/conversation')
+const Conversation = require('../model/conversation')
 const userModel = require('../model/user')
 
 const createConversation = async (req, res) => {
@@ -11,7 +10,7 @@ const createConversation = async (req, res) => {
         if (friendInfo == null) {
             throw new Error("friend not found")
         }
-        const conversationInfo = await conversationModel.findOne({
+        const conversationInfo = await Conversation.findOne({
             members: {
                 $all: [friendId, id]
             }
@@ -19,7 +18,7 @@ const createConversation = async (req, res) => {
         if (conversationInfo) {
             throw new Error("conversation existed")
         }
-        const newConversation = await new conversationModel({
+        const newConversation = await new Conversation({
             members: [id, friendId]
         }).save()
         await userModel.findByIdAndUpdate(id, {
@@ -53,7 +52,6 @@ const getAllConversation = async (req, res) => {
                 }
             }
         })
-        // console.log(conversations)
         if (!conversations) res.json(statusResponse.OK)
         conversations.map(e => {
             let { messages } = conversations
@@ -74,7 +72,6 @@ const getAllConversation = async (req, res) => {
 }
 
 const getConversation = async (req, res) => {
-    // console.log("get")
     const { user_id } = req.params
     const { id } = req.decoded
     try {
@@ -97,7 +94,6 @@ const getConversation = async (req, res) => {
         if (!meInfo || !user_id) return res.json(statusResponse.NOT_FOUND)
         const { conversations } = meInfo
         let conversationsJson = conversations && conversations.find(conversation => conversation?.members.some(x => x == user_id))
-        // console.log(userInfo)
         res.json({
             ...statusResponse.OK,
             data: {
@@ -105,17 +101,15 @@ const getConversation = async (req, res) => {
                 conversations: conversationsJson
             }
         })
-        // console.log('result', result)
     } catch (error) {
         console.log(error?.message)
-        // res.json(statusResponse.UNKNOWN)
     }
 }
 
 const deleteConversation = async (req, res) => {
     const { conversationId } = req.params
     try {
-        const result = await conversationModel.findByIdAndDelete(conversationId)
+        const result = await Conversation.findByIdAndDelete(conversationId)
         res.json(result)
     } catch (error) {
         res.json(error?.message)
@@ -133,7 +127,6 @@ const getLastConversation = async (req, res) => {
             },
             limit: 1
         })
-        // console.log(conversations)
         res.json({
             ...statusResponse.OK,
             data: conversations
@@ -147,8 +140,7 @@ const getLastConversation = async (req, res) => {
 const getAllMedias = async (req, res) => {
     const { conversationId } = req.query
     try {
-        const { messages } = await conversationModel.findById(conversationId)
-        // console.log(`messages`, messages.filter(x => x.kind === "images"))
+        const { messages } = await Conversation.findById(conversationId)
         res.json({
             ...statusResponse.OK,
             data: messages.filter(x => x.kind === "images")

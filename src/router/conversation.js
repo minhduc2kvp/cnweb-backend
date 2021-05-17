@@ -1,9 +1,9 @@
 var express = require('express')
 var router = express.Router()
 const conversationController = require('../controller/conversation')
-const authMiddleware = require('../middleware/auth')
+const auth = require('../middleware/auth')
 // middleware that is specific to this router
-router.use(authMiddleware.isAuth)
+router.use(auth.isAuth)
 
 router.post('/', conversationController.createConversation)
 
