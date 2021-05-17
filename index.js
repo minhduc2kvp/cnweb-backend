@@ -8,7 +8,7 @@ const socket = require('socket.io');
 const uploadRoute = require('./src/router/upload')
 const imageRoute = require('./src/router/image')
 const userRoute = require('./src/router/user')
-
+const conversationRoute = require('./src/router/conversation');
 const app = express();
 const server = http.Server(app);
 
@@ -23,7 +23,7 @@ const port = process.env.PORT;
 
 const mongoose = require("mongoose");
 mongoose.connect(
-  process.env.MONGO_URL,
+  process.env.MONGO_URL || 'mongodb://localhost:27017/message-db',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -40,6 +40,7 @@ app.use(express.json());
 app.use('/upload', uploadRoute)
 app.use('/api', imageRoute)
 app.use('/user', userRoute)
+app.use('/conversation', conversationRoute)
 
 server.listen(port, () => {
   console.log(`Socket.IO server running at http://localhost:${port}/`);
