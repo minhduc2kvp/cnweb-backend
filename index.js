@@ -10,6 +10,7 @@ const imageRoute = require('./src/router/image')
 const userRoute = require('./src/router/user')
 const conversationRoute = require('./src/router/conversation')
 const tokenRoute = require('./src/router/token')
+const socketRoute = require('./src/router/socket')
 
 const app = express();
 const server = http.Server(app);
@@ -45,6 +46,8 @@ app.use('/upload', uploadRoute)
 app.use('/image', imageRoute)
 app.use('/user', userRoute)
 app.use('/conversation', conversationRoute)
+
+io.on('connection', socket => socketRoute(io, socket))
 
 server.listen(port, () => {
   console.log(`Server running at ${host}:${port}`);
