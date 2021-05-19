@@ -1,11 +1,12 @@
-const userModel = require('../model/user')
-const jwt = require("jsonwebtoken");
-const statusResponse = require('../common/status');
+const jwt = require("jsonwebtoken")
+const User = require('../model/user')
+const statusResponse = require('../common/status')
+
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
         if(!email||!password) return res.json(statusResponse.PARAMS_MISS)
-        const userInfo = await userModel.findOne({ email, password });
+        const userInfo = await User.findOne({ email, password });
         if (userInfo) {
             const token = jwt.sign({
                 id: userInfo?._id,

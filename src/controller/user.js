@@ -21,10 +21,10 @@ const signup = async (req, res) => {
 }
 
 const getInfoUser = async (req, res) => {
-    const { user_id } = req.params;
+    const { id } = req.decoded
     try {
-        if (!user_id) return res.json(statusResponse.PARAMS_MISS)
-        const userInfo = await User.findById(user_id).select("username cover_image avatar email birthday friends");
+        if (!id) return res.json(statusResponse.PARAMS_MISS)
+        const userInfo = await User.findById(id).select("username cover_image avatar email birthday friends");
         if (!userInfo) return res.json(statusResponse.NOT_FOUND)
         return res.json({
             ...statusResponse.OK,
@@ -49,9 +49,9 @@ const getAllUsers = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-    const { user_id } = req.params
+    const { id } = req.decoded
     try {
-        const result = await User.deleteOne({ _id: user_id });
+        const result = await User.deleteOne({ _id: id });
         res.json(result)
     } catch (error) {
         if (error) {
@@ -63,10 +63,10 @@ const deleteUser = async (req, res) => {
 }
 
 const updateInfoUser = async (req, res) => {
-    const { user_id } = req.params
+    const { id } = req.decoded
     const { username, phonenumber, email, birthday } = req.body;
     try {
-        let userInfo = await User.findById(user_id)
+        let userInfo = await User.findById(id)
         if (userInfo) {
             console.log(`req.body`, req.body)
             username && (userInfo.username = username);
@@ -90,10 +90,10 @@ const updateInfoUser = async (req, res) => {
 
 const uploadAvatar = async (req, res) => {
     const { file } = req
-    const { user_id } = req.params
+    const { id } = req.decoded
     try {
         var result = await uploadImage(file)
-        await User.findByIdAndUpdate(user_id, {
+        await User.findByIdAndUpdate(id, {
             $set: {
                 avatar: result
             }
@@ -113,10 +113,10 @@ const uploadAvatar = async (req, res) => {
 
 const uploadCoverImage = async (req, res) => {
     const { file } = req
-    const { user_id } = req.params
+    const { id } = req.decoded
     try {
         var result = await uploadImage(file)
-        await User.findByIdAndUpdate(user_id, {
+        await User.findByIdAndUpdate(id, {
             $set: {
                 cover_image: result
             }

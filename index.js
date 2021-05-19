@@ -23,6 +23,7 @@ const io = socket(server, {
   }
 });
 
+const host = process.env.HOST;
 const port = process.env.PORT;
 
 const mongoose = require("mongoose");
@@ -41,8 +42,9 @@ app.use(bodyParser.json({ limit: "50mb" })); // for parsing application/json
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.json());
 
+app.use('/', tokenRoute)
 app.use('/upload', uploadRoute)
-app.use('/api', imageRoute)
+app.use('/image', imageRoute)
 app.use('/user', userRoute)
 app.use('/conversation', conversationRoute)
 app.use('/search', searchRoute)
@@ -50,5 +52,5 @@ app.use('/token', tokenRoute)
 app.use('/friend', friendRoute)
 
 server.listen(port, () => {
-  console.log(`Socket.IO server running at http://localhost:${port}/`);
+  console.log(`Server running at ${host}:${port}`);
 });
