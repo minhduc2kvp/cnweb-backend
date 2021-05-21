@@ -1,6 +1,7 @@
 const { RECEIVE_MESSAGE, NEW_CONVERSATION, TYPING, ISREAD, RECEIVED } = require('../common/event');
 const Conversation = require('../model/conversation')
 const User = require('../model/user')
+
 const join = async (io, socket, { conversationId, userId, members }) => {
     console.log("join", userId, conversationId)
     if (conversationId) {
