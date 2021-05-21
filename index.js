@@ -12,6 +12,7 @@ const conversationRoute = require('./src/router/conversation')
 const searchRoute = require('./src/router/search')
 const tokenRoute = require('./src/router/token')
 const friendRoute = require('./src/router/friend')
+const socketRoute = require('./src/router/socket')
 
 const app = express();
 const server = http.Server(app);
@@ -35,7 +36,9 @@ mongoose.connect(
     useFindAndModify: false,
     useCreateIndex: true
   }
-);
+)
+.then(console.log(">> Database connected!"))
+.catch(err => console.log(err));
 
 app.use(cors())
 app.use(bodyParser.json({ limit: "50mb" })); // for parsing application/json
@@ -51,6 +54,8 @@ app.use('/search', searchRoute)
 app.use('/token', tokenRoute)
 app.use('/friend', friendRoute)
 
+io.on('connection', socket => socketRoute(io, socket))
+
 server.listen(port, () => {
-  console.log(`Server running at ${host}:${port}`);
+  console.log(`>> Server running at ${host}:${port}`);
 });
