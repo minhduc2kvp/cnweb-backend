@@ -3,14 +3,16 @@ const User = require('../model/user')
 const { uploadImage } = require("../service/upload")
 
 const signup = async (req, res) => {
-    const { email, password } = req.body;
+    const { firstname, lastname, email, password } = req.body;
     try {
-        if (!email || !password) return res.json(statusResponse.PARAMS_MISS)
+        if (!firstname || !lastname || !email || !password) return res.json(statusResponse.PARAMS_MISS)
 
         const userInfo = await User.find({ email: email })
         if (userInfo?.length > 0) return res.json(statusResponse.USER_EXISTED)
 
         await new User({
+            firstname,
+            lastname,
             email,
             password
         }).save()
@@ -24,7 +26,7 @@ const getInfoUser = async (req, res) => {
     const { id } = req.decoded
     try {
         if (!id) return res.json(statusResponse.PARAMS_MISS)
-        const userInfo = await User.findById(id).select("username cover_image avatar email birthday friends");
+        const userInfo = await User.findById(id).select("firstname lastname username cover_image avatar email birthday friends");
         if (!userInfo) return res.json(statusResponse.NOT_FOUND)
         return res.json({
             ...statusResponse.OK,

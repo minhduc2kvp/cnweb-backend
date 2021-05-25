@@ -4,6 +4,8 @@ const userSchema = new mongoose.Schema({
     is_friend: Boolean,
     same_friends: Number,
     phonenumber: String,
+    firstname: String,
+    lastname: String,
     email: String,
     username: String,
     password: String,
