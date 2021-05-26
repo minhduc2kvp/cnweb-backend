@@ -43,7 +43,7 @@ const getAllSentRequestFriends = async (req, res) => {
     try {
         const { sentRequestFriends } = await userModel.findById(id).populate({
             path: "sentRequestFriends.user",
-            select: "username avatar email"
+            select: "firstname lastname username avatar email"
         });
         // console.log(sentRequestFriends)
         return res.json({
@@ -62,7 +62,7 @@ const getAllReceivedRequestFriends = async (req, res) => {
     try {
         const { receivedRequestFriends } = await userModel.findById(id).populate({
             path: 'receivedRequestFriends.user',
-            select: 'username email avatar'
+            select: 'firstname lastname username email avatar'
         });
 
         // console.log(receivedRequestFriends)

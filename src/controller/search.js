@@ -6,7 +6,7 @@ const searchUser = async (req, res) => {
     const { id } = req.decoded
     try {
         if (!keyword) {
-            const [othersInfo, meInfo] = await Promise.all([userModel.find().select('username avatar email is_friend same_friends'), userModel.findById(id)])
+            const [othersInfo, meInfo] = await Promise.all([userModel.find().select('firstname lastname username avatar email is_friend same_friends'), userModel.findById(id)])
             // const results = await 
             // console.log("res:",results)
             for (let i = 0; i < othersInfo.length; i += 1) {

@@ -66,17 +66,20 @@ const deleteUser = async (req, res) => {
 
 const updateInfoUser = async (req, res) => {
     const { id } = req.decoded
-    const { username, phonenumber, email, birthday } = req.body;
+    const { firstname, lastname, username, birthday } = req.body;
     try {
         let userInfo = await User.findById(id)
         if (userInfo) {
-            console.log(`req.body`, req.body)
+            // console.log(`req.body`, req.body)
+            firstname && (userInfo.firstname = firstname);
+            lastname && (userInfo.lastname = lastname);
             username && (userInfo.username = username);
-            email && (userInfo.email = email);
-            phonenumber && (userInfo.phonenumber = phonenumber);
             birthday && (userInfo.birthday = birthday);
             await userInfo.save()
-            res.json(userInfo)
+            res.json({
+                ...statusResponse.OK,
+                data: userInfo
+            })
         } else {
             throw new Error("user not found")
         }
